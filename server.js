@@ -2,7 +2,8 @@ var http = require('http');
 var port = process.env.PORT;
 
 http.createServer(
-function (request, response) {
+function (request, response)
+{
 	if (request.method == 'POST')
 	{
 		var body = '';
@@ -21,10 +22,15 @@ function (request, response) {
 		request.on('end',
 			function ()
 			{
-				res.writeHead(200, { 'Content-Type': 'text/plain' });
-				res.end(body.toString());
+				response.writeHead(200, { 'Content-Type': 'text/plain' });
+				response.end(body.toString());
 			}
 		);
+	}
+	else
+	{
+        response.writeHead(200, { 'Content-Type': 'text/plain' });
+		response.end("support only POST requests\n");
 	}
 }
 ).listen(port);
