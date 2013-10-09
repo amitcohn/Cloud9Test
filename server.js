@@ -30,7 +30,7 @@ function (request, response)
 	else
 	{
         response.writeHead(200, { 'Content-Type': 'text/plain' });
-		response.end("support only POST requests\n");
+		response.end('support only POST requests\n');
 	}
 }
 ).listen(port);
