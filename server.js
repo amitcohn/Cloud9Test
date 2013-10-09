@@ -11,21 +11,15 @@ function (request, response)
 			function (data)
 			{
 				body += data;
-				// 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-				if (body.length > 1e6)
-				{
-					// FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
+				if (body.length > 1e7/*~10M*/) // FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
 					request.connection.destroy();
-				}
 			}
 		);
 		request.on('end',
 			function ()
 			{
 				response.writeHead(200, { 'Content-Type': 'text/plain' });
-				var bodyObj = JSON.parse(body.toString());
-				var bodyStr = JSON.stringify(bodyObj);
-				response.end(bodyStr);
+				response.end(JSON.stringify(HandleRequest(JSON.parse(body.toString()))));
 			}
 		);
 	}
@@ -36,3 +30,8 @@ function (request, response)
 	}
 }
 ).listen(port);
+
+function HandleRequest(inRequestObj)
+{
+	return inRequestObj; // for the sample just return back the request as is
+}
