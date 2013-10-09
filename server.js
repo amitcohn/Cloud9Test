@@ -23,13 +23,15 @@ function (request, response)
 			function ()
 			{
 				response.writeHead(200, { 'Content-Type': 'text/plain' });
-				response.end(body.toString());
+				var bodyObj = JSON.parse(body.toString());
+				var bodyStr = JSON.stringify(bodyObj);
+				response.end(bodyStr);
 			}
 		);
 	}
 	else
 	{
-        response.writeHead(200, { 'Content-Type': 'text/plain' });
+	    response.writeHead(200, { 'Content-Type': 'text/plain' });
 		response.end('support only POST requests\n');
 	}
 }
