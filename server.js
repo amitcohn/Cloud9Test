@@ -53,7 +53,7 @@ else
         if (!planName) {
             planName = 's1.js'; // just a default
         }
-        var fieldValuesFile = fs.readFileSync("AmitReq.json", 'utf8'); 
+        var fieldValuesFile = fs.readFileSync("ClientReq.json", 'utf8'); 
         var fieldValues = JSON.parse(fieldValuesFile).RecipientData; 
         execNewPlan(planName, fieldValues, res)
     });
