@@ -1,0 +1,4 @@
+curl -s http://localhost:8126/$1 | python -mjson.tool
+#curl -s http://localhost:8126/recs/00Q7000000J9q3v
+
+echo
