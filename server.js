@@ -33,16 +33,26 @@ else
     });
     var fieldValues = {};
     var planName;
+    // POST command where the request parameters are in the request body
     app.post('/', function(req, res)
     {
-        console.log(req.body.RecipientData);
         var planID = req.body.PlanID;
         var jobID = req.body.JobID;
         var requestID = req.body.RequestID;
         fieldValues = req.body.RecipientData;
         planName = planID + ".js";
+        console.log(fieldValues);
+        execNewPlan(planName, new Array(fieldValues), res)
+    });
+    // POST command where the request parameters are in the URL in REST-style (good for data piping)
+    app.post('/plans/:PlanID', function(req, res)
+    {
+        var planID = req.params.PlanID;
+        fieldValues = req.body;
+        planName = planID + ".js";
         execNewPlan(planName, fieldValues, res)
     });
+    // GET command for testing
     app.get('/', function(req, res)
     {
         console.log("Serving request from " + process.pid);
@@ -55,13 +65,13 @@ else
         }
         var fieldValuesFile = fs.readFileSync("ClientReq.json", 'utf8'); 
         var fieldValues = JSON.parse(fieldValuesFile).RecipientData; 
-        execNewPlan(planName, fieldValues, res)
+        execNewPlan(planName, new Array(fieldValues), res)
     });
     app.listen(serverPort);
     
     ///////////////
     
-    function execNewPlan(planName, fieldValues, res)
+    function execNewPlan(planName, fieldValues_arr, res)
     {
 
         var planFile = './Plans/' + planName;
@@ -78,8 +88,14 @@ else
         // the following line is a test for override capability: load a plan module then override (or add) an ADOR expression.
         //p.addAdorAndDetails("A1", function() { return 4; });
         // evaluate all ADORs, and return the result as JSON.
-        var responseString = JSON.stringify(p.evalRecord(fieldValues));
+        //var responseString = JSON.stringify(p.evalRecord(fieldValues));
+        var AVL_arr = new Array();
+        for (var i=0; i<fieldValues_arr.length; i++)
+        {
+            AVL_arr[i] = p.evalRecord(fieldValues_arr[i]);
+        }
         res.writeHead(200, {'Content-Type': 'application/json'});
+        var responseString = JSON.stringify(AVL_arr);
         res.end(responseString);
     }
     
