@@ -1,0 +1,5 @@
+#curl -X POST -d @AmitReq.json http://localhost:8124  --header "Content-Type:application/json"
+#curl -X POST -d @AmitReq.json http://xmpielogic.azurewebsites.net  --header "Content-Type:application/json"
+#curl -X POST -d @ClientReq.json ec2-54-225-58-64.compute-1.amazonaws.com:8124  --header "Content-Type:application/json"
+curl -X POST -d @ClientReq.json http://localhost:8124  --header "Content-Type:application/json"
+
