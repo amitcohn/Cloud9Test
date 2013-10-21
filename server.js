@@ -33,9 +33,13 @@ else
 	});
 	var fieldValues = {};
 	var planName;
+	var isSingleRecord = false;
 	// POST command where the request parameters are in the request body
 	app.post('/', function(req, res)
 	{
+		// This is the request coming from the PlanTech plugin, that expects a single record in the output.
+		// So set isSingleRecord to true.
+		isSingleRecord = true;
 		var planID = req.body.PlanId;
 		var jobID = req.body.JobId;
 		var requestID = req.body.RequestId;
@@ -50,7 +54,7 @@ else
 		}
 		else
 		{
-			execNewPlan(planName, new Array(fieldValues), res);
+			execNewPlan(planName, new Array(fieldValues), isSingleRecord, res);
 		}
 	});
 	// POST command where the request parameters are in the URL in REST-style (good for data piping)
@@ -59,7 +63,7 @@ else
 		var planID = req.params.PlanID;
 		fieldValues = req.body;
 		planName = planID + ".js";
-		execNewPlan(planName, fieldValues, res)
+		execNewPlan(planName, fieldValues, isSingleRecord, res)
 	});
 	// GET command for testing
 	app.get('/', function(req, res)
@@ -74,13 +78,13 @@ else
 		}
 		var fieldValuesFile = fs.readFileSync("ClientReq.json", 'utf8'); 
 		var fieldValues = JSON.parse(fieldValuesFile).RecipientData; 
-		execNewPlan(planName, new Array(fieldValues), res)
+		execNewPlan(planName, new Array(fieldValues), isSingleRecord, res);
 	});
 	app.listen(serverPort);
 	
 	///////////////
 	
-	function execNewPlan(planName, fieldValues_arr, res)
+	function execNewPlan(planName, fieldValues_arr, isSingleRecord, res)
 	{
 
 		var planFile = './Plans/' + planName;
@@ -103,9 +107,21 @@ else
 		{
 			AVL_arr[i] = p.evalRecord(fieldValues_arr[i]);
 		}
+		// write the AVL arrays as JSON
 		res.writeHead(200, {'Content-Type': 'application/json'});
-		var responseString = JSON.stringify(AVL_arr);
-		res.end(responseString);
+		if (isSingleRecord === true) { 
+			// Return only a single (the first record), not an array.
+			// This is a patch for the PlanTech plugin (TODO: fix)
+			var responseString = JSON.stringify(AVL_arr[0]);
+			res.end(responseString);
+			return AVL_arr[0];
+		}
+		else { 
+			// Return the full resut array
+			var responseString = JSON.stringify(AVL_arr);
+			res.end(responseString);
+			return AVL_arr;
+		}
 	}
 	
 	String.prototype.endsWith = function(suffix) {
