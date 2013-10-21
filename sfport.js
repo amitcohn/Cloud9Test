@@ -23,21 +23,21 @@ app.get('/recs/:recID', function(req, res)
     //console.log(recID)
     getDataByIDs(res, recID);
 });
-app.get('/range/:offset,:limit', function(req, res)
+app.get('/range/:from,:to', function(req, res)
 {
-    var offset = req.params.offset;
-    var limit = req.params.limit;
+    var fromRec = req.params.from;
+    var toRec = req.params.to;
+    console.log("Range request: from " + fromRec + " to " + toRec);
     //recID = "00Q7000000J9q3v"; // "00Q7000000rjC4Q"
     //console.log(recID)
-    getDataByIDs(res, null, offset, limit);
-    //console.log("offset: ", offset);
+    getDataByIDs(res, null, fromRec, toRec);
 });
 app.listen(serverPort);
 console.log('Server running at port ' + serverPort + '...');
 
 
 
-function getDataByIDs(res, recID, offset, limit)
+function getDataByIDs(res, recID, fromRec, toRec)
 {
     var conn = new sf.Connection({
       // you can change loginUrl to connect to sandbox or prerelease env.
@@ -93,8 +93,8 @@ function getDataByIDs(res, recID, offset, limit)
     conn.sobject("Lead")
   .select('*') // asterisk means all fields in specified level are target.
   //.where("CreatedDate = TODAY") // conditions in raw SOQL where clause.
-  .offset(offset) // synonym of "skip"
-  .limit(limit) // max records
+  .offset(fromRec) // synonym of "skip"
+  .limit(toRec-fromRec+1) // max records
   .where(whereCondition)
   .execute(
       function(err, accounts) {
