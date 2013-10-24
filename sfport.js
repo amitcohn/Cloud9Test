@@ -80,7 +80,7 @@ function getDataByIDs(res, recID, fromRec, toRec)
 */
     //var recID_arr = [ recID ];
     res.writeHead(200, {'Content-Type': 'application/json'});
-    var fields = ["FirstName", "LastName", "Company"];
+    var fields = ["FirstName", "LastName", "Company", "City", "PostalCode"];
     var AVL_arr = new Array();
     //var whereCondition = "id != '00Q7000000J9q3v'";
     var whereCondition = "status != 'blah'";
@@ -104,6 +104,7 @@ function getDataByIDs(res, recID, fromRec, toRec)
           for (var j=0; j<fields.length; j++) {
             var fieldName = fields[j];
             rec[fieldName] = accounts[i][fieldName];        
+	    //rec = accounts[i];
           }
           AVL_arr[i] = rec;
           //console.log("Name : " + accounts[i].Name);
