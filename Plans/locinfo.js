@@ -14,9 +14,9 @@ function getRoute(zip1, zip2)
     //console.log(url);
     //console.log(respJS);
     var distanceMeters = respJS["routes"][0]["legs"][0]["distance"]["value"];
-    var distanceMiles = 0.00062137 * distanceMeters;
+    //var distanceMiles = 0.00062137 * distanceMeters;
     //console.log(zip1 + " --> " + zip2 + ": Distance: " + distanceMiles);
-    return distanceMiles;
+    return distanceMeters/1000.0;
     //return city;
 }
 

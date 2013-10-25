@@ -71,19 +71,28 @@ PlanMod.prototype.calc_Distance = function()
 
 PlanMod.prototype.calc_DistanceMsg = function()
 {
-	var d = P.ADOR("Distance");
+	var distanceKm = P.ADOR("Distance");
+	//var geolib = require('geolib');
+	//var distanceMiles = geolib.convertUnit('mi', distanceKm*1000, 5);
+	//distanceMiles = Math.round(distanceMiles);
 	var msg;
-	if (d == -1)
+	msg = "Welcome to Anaheim " + P.ADOR("FirstName") + "!\n" + 
+	      "You travelled " + distanceKm + " km to be here.\n";
+	if (distanceKm == -1)
 	{
-		msg = "Home is... somewhere"
+		msg += "Thanks for coming!";
 	}
-	else if (d < 100)
+	else if (distanceKm < 5)
 	{
-		msg = "Home is close by";
+		msg += "Did you walk here from home?";
+	}
+	else if (distanceKm < 100)
+	{
+		msg += "You can make it home for dinner!";
 	}
 	else
 	{
-		msg = "Far from home";
+		msg += "Thanks for coming from that far!";
 	}
 	return msg;
 }
