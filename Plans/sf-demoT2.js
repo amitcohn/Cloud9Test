@@ -72,12 +72,12 @@ PlanMod.prototype.calc_Distance = function()
 PlanMod.prototype.calc_DistanceMsg = function()
 {
 	var distanceKm = P.ADOR("Distance");
-	//var geolib = require('geolib');
-	//var distanceMiles = geolib.convertUnit('mi', distanceKm*1000, 5);
-	//distanceMiles = Math.round(distanceMiles);
+	var geolib = require('geolib');
+	var distanceMiles = geolib.convertUnit('mi', distanceKm*1000, 5);
+	distanceMiles = Math.round(distanceMiles);
 	var msg;
 	msg = "Welcome to Anaheim " + P.ADOR("FirstName") + "!\n" + 
-	      "You travelled " + distanceKm + " km to be here.\n";
+	      "You travelled " + distanceMiles + " miles to be here.\n";
 	if (distanceKm == -1)
 	{
 		msg += "Thanks for coming!";
