@@ -1,0 +1,4 @@
+curl -s -X POST -d @- http://ec2-54-225-58-64.compute-1.amazonaws.com:8124/plans/$1  --header "Content-Type:application/json" | python -mjson.tool
+
+echo
+
